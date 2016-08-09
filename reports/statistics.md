@@ -27,15 +27,15 @@ For example:
 REVENUE
 == Sum(% we earned * price_micros of all order_items in date range)
 
+Note: the % we earned should vary (and intentionally not documented).
+To reflect real price change, it should increase overtime,
+with a small dip after the revenue increases
+
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
 
 PROFIT
 == Sum(item revenue, minus delivery cost)
-
-Note: the % we earned should vary (and intentionally not documented).
-To reflect real price change, it should increase overtime,
-with a small dip after the revenue increases
 
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
