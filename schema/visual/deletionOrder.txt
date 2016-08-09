@@ -1,0 +1,13 @@
+exchange_rates
+order_items
+categories_taxonomies
+orders
+product_prices
+products
+cards
+addresses
+courier_packages
+sellers
+couriers
+users
+categories

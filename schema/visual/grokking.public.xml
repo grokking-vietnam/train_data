@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="grokking" schema="public" type="PostgreSQL - 9.5.3">
+   <tables>
+      <table name="addresses" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.addresses'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="delivery_address" foreignKey="orders_delivery_address_fkey" implied="false" onDeleteCascade="false" table="orders"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="address" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="city" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="state" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="4" name="contact_number" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="5" name="user_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="addresses_user_id_fkey" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="addresses_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="cards" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.cards'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="card_id" foreignKey="orders_card_id_fkey" implied="false" onDeleteCascade="false" table="orders"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="last_4_digits" nullable="false" remarks="" size="4" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="expiry_date" nullable="false" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="3" name="user_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="cards_user_id_fkey" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="cards_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="categories" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.categories'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="child_id" foreignKey="categories_taxonomies_child_id_fkey" implied="false" onDeleteCascade="false" table="categories_taxonomies"/>
+            <child column="parent_id" foreignKey="categories_taxonomies_parent_id_fkey" implied="false" onDeleteCascade="false" table="categories_taxonomies"/>
+            <child column="category_id" foreignKey="products_category_id_fkey" implied="false" onDeleteCascade="false" table="products"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_name" nullable="false" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="categories_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="categories_taxonomies" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="parent_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="categories_taxonomies_parent_id_fkey" implied="false" onDeleteCascade="false" table="categories"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="child_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="categories_taxonomies_child_id_fkey" implied="false" onDeleteCascade="false" table="categories"/>
+         </column>
+      </table>
+      <table name="courier_packages" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="courier_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="courier_id" foreignKey="orders_courier_id_fkey1" implied="false" onDeleteCascade="false" table="orders"/>
+            <parent column="id" foreignKey="courier_packages_courier_id_fkey" implied="false" onDeleteCascade="false" table="couriers"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="package_id" nullable="false" remarks="" size="2147483647" type="text">
+            <child column="package_id" foreignKey="orders_courier_id_fkey1" implied="false" onDeleteCascade="false" table="orders"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="2" name="delivered_at" nullable="true" remarks="" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="0" id="3" name="cost_micros" nullable="false" remarks="" size="10" type="int4"/>
+         <primaryKey column="courier_id" sequenceNumberInPK="1"/>
+         <primaryKey column="package_id" sequenceNumberInPK="2"/>
+         <index name="courier_packages_pkey" unique="true">
+            <column ascending="true" name="courier_id"/>
+            <column ascending="true" name="package_id"/>
+         </index>
+      </table>
+      <table name="couriers" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.couriers'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="courier_id" foreignKey="courier_packages_courier_id_fkey" implied="false" onDeleteCascade="false" table="courier_packages"/>
+            <child column="courier_id" foreignKey="orders_courier_id_fkey" implied="false" onDeleteCascade="false" table="orders"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="couriers_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="exchange_rates" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="currency" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="1" name="day" nullable="false" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="2" name="rate_micros" nullable="false" remarks="" size="10" type="int4"/>
+         <primaryKey column="currency" sequenceNumberInPK="1"/>
+         <primaryKey column="day" sequenceNumberInPK="2"/>
+         <index name="exchange_rates_pkey" unique="true">
+            <column ascending="true" name="currency"/>
+            <column ascending="true" name="day"/>
+         </index>
+      </table>
+      <table name="order_items" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="product_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="product_id" foreignKey="order_items_product_id_fkey" implied="false" onDeleteCascade="false" table="product_prices"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="1" name="purchased_at" nullable="false" remarks="" size="35" type="timestamptz">
+            <parent column="created_at" foreignKey="order_items_product_id_fkey" implied="false" onDeleteCascade="false" table="product_prices"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="order_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="order_items_order_id_fkey" implied="false" onDeleteCascade="false" table="orders"/>
+         </column>
+         <primaryKey column="product_id" sequenceNumberInPK="1"/>
+         <primaryKey column="order_id" sequenceNumberInPK="2"/>
+         <index name="order_items_pkey" unique="true">
+            <column ascending="true" name="product_id"/>
+            <column ascending="true" name="order_id"/>
+         </index>
+      </table>
+      <table name="orders" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.orders'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="order_id" foreignKey="order_items_order_id_fkey" implied="false" onDeleteCascade="false" table="order_items"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="delivery_address" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="orders_delivery_address_fkey" implied="false" onDeleteCascade="false" table="addresses"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="status" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="user_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="orders_user_id_fkey" implied="false" onDeleteCascade="false" table="users"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="card_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="orders_card_id_fkey" implied="false" onDeleteCascade="false" table="cards"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="0" id="6" name="courier_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="orders_courier_id_fkey" implied="false" onDeleteCascade="false" table="couriers"/>
+            <parent column="courier_id" foreignKey="orders_courier_id_fkey1" implied="false" onDeleteCascade="false" table="courier_packages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="7" name="package_id" nullable="false" remarks="" size="2147483647" type="text">
+            <parent column="package_id" foreignKey="orders_courier_id_fkey1" implied="false" onDeleteCascade="false" table="courier_packages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="8" name="total_micros" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="9" name="total_currency" nullable="false" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="orders_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="orders_courier_id_package_id_key" unique="true">
+            <column ascending="true" name="courier_id"/>
+            <column ascending="true" name="package_id"/>
+         </index>
+      </table>
+      <table name="product_prices" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="product_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="product_id" foreignKey="order_items_product_id_fkey" implied="false" onDeleteCascade="false" table="order_items"/>
+            <parent column="id" foreignKey="product_prices_product_id_fkey" implied="false" onDeleteCascade="false" table="products"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="1" name="created_at" nullable="false" remarks="" size="35" type="timestamptz">
+            <child column="purchased_at" foreignKey="order_items_product_id_fkey" implied="false" onDeleteCascade="false" table="order_items"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="discount_percentage" nullable="false" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="price_micros" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="currency" nullable="false" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="product_id" sequenceNumberInPK="1"/>
+         <primaryKey column="created_at" sequenceNumberInPK="2"/>
+         <index name="product_prices_pkey" unique="true">
+            <column ascending="true" name="product_id"/>
+            <column ascending="true" name="created_at"/>
+         </index>
+      </table>
+      <table name="products" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.products'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="product_id" foreignKey="product_prices_product_id_fkey" implied="false" onDeleteCascade="false" table="product_prices"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="seller_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="products_seller_id_fkey" implied="false" onDeleteCascade="false" table="sellers"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="display_name" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="category_id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="products_category_id_fkey" implied="false" onDeleteCascade="false" table="categories"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="products_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="sellers" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.sellers'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="seller_id" foreignKey="products_seller_id_fkey" implied="false" onDeleteCascade="false" table="products"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="display_name" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="info" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="contact_number" nullable="false" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="sellers_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="users" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v5(uuid_ns_dns(), 'grokking.org.users'::text)" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="user_id" foreignKey="addresses_user_id_fkey" implied="false" onDeleteCascade="false" table="addresses"/>
+            <child column="user_id" foreignKey="cards_user_id_fkey" implied="false" onDeleteCascade="false" table="cards"/>
+            <child column="user_id" foreignKey="orders_user_id_fkey" implied="false" onDeleteCascade="false" table="orders"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="birthday" nullable="false" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="3" name="email" nullable="false" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="users_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+   </tables>
+</database>
