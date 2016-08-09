@@ -1,4 +1,7 @@
-prepate:
+all: clean schema
+
+prepare:
+	@echo "prepare things on the box"
 	sudo apt-get install graphviz
 
 run: create.sql
